@@ -147,7 +147,7 @@ The server immediately sends the wav blob back to all the clients (except for th
 	   	{
 			if (client !==ws && client.readyState == WebSocket.OPEN)
 		   	{
-          		client.send( msg );    
+          			client.send( msg );    
 		   	}
 	   	});
 	}
