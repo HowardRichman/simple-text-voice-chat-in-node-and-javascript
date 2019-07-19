@@ -173,12 +173,16 @@ This command strips off the 44 byte wav header from the blob and writes the buff
 
 ACKNOWLEDGMENTS
 
-The parts of the program that record the input from the microphone owe much to two closely related contributions: 
+The basic structure of the websocket client comes from Peter Thoeny's post, "How to Create a Chat Application with a WebSocket": https://twiki.org/cgi-bin/view/Blog/BlogEntry201604x1
 
+The parts of the client that record the input from the microphone owe much to two closely related contributions: 
 1. Matt Diamond's recorder.js: https://github.com/mattdiamond/Recorderjs
-
 2. Gabriel Poca's tutorial, "HTML Capture streaming to Node.js (no browser extensions)": https://gabrielpoca.com/2014-06-24-streaming-microphone-from-browser-to-nodejs-no-plugin/
 
-The parts of the program that send data to speakers owe much to Sam Manchin's "Streaming Calls to a Browser with Voice Websockets": https://www.nexmo.com/blog/2016/12/19/streaming-calls-to-a-browser-with-voice-websockets-dr
+The parts of the client that send data to speakers owe much to Sam Manchin's "Streaming Calls to a Browser with Voice Websockets": https://www.nexmo.com/blog/2016/12/19/streaming-calls-to-a-browser-with-voice-websockets-dr
 
-Don't confuse me with a JavaScript expert. I have been programming in Fortran, Basic, IPL-V, LISP, C, Perl, and Java for about 50 years but am new to Javascript. The odd way I line up parentheses is due to the way I learned to do it in LISP. Any suggestions that you have for improving the code will be appreciated. Email them to Howard Richman (drhbr1950@gmail.com). 
+The ws server borrows heavily from the documentation that accompanied "ws: a Node.js WebSocket library": https://www.npmjs.com/package/ws
+
+Don't confuse me with a JavaScript expert. I have been programming in Fortran, Basic, IPL-V, LISP, C, Perl, and Java for about 50 years but am new to Javascript. The odd way I line up parentheses is due to the way I learned to do it in LISP. Any suggestions that you have for improving the code will be appreciated. Email them to me (drhbr1950@gmail.com). 
+
+Howard Richman
