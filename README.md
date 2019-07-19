@@ -57,7 +57,7 @@ The following buttons are available at the bottom of the chat window:
 
 The voice chat features do not work in all browsers. For example, you can't hear people speaking live in Safari at its default settings, but all of the features work in both Chrome and Firefox at their default settings. If your browser doesn't allow you to speak or listen to the live voice, it will still allow you to participate by posting text and by listening to immediately posted recordings of the live voices. Here is how the voice chat features of the client work:
 
-The voice data comes off the microphone and gets sent to the worker file through the following commands:
+After you press the Record Button, your voice data comes off the left channel of your microphone in 4096 byte floating-point buffers. Each buffer gets sent to the worker file through the following commands:
 
 	const AudioContext = window.AudioContext || window.webkitAudioContext;
 
@@ -88,14 +88,14 @@ The voice data comes off the microphone and gets sent to the worker file through
     	worker.postMessage ( left );    
   	}
 
-The voice data is received back from the web worker as a wav blob and then is sent to the server using the following command:
+The info from the buffer is received back from the web worker in the form of a wav blob and then is sent to the server using the following command:
 
   	worker.onmessage = function(event)  
   	{  
     	webSocket.send( event.data );    
   	}
 
-The voice data is received from the websocket server as a wav blob and is sent to the speaker using the following code:
+When someone else speaks, voice data is received from the websocket server as wav blobs. Each individual blob is sent to the speaker using the following code:
 
 	function processSpeakerData(data)
 	{
@@ -148,7 +148,7 @@ The web worker contains a single function which receives a floating point buffer
 
 SERVER
 
-The Node server uses "ws: a Node.js WebSocket library": (https://www.npmjs.com/package/ws). This is a very simple and fast websocket server that doesn't have built-in support for streams. Upon receipt of a wav blob from a client, the server sends it to all the connected clients, except for the client from whom the blob came, through the following commands:
+The Node server uses "ws: a Node.js WebSocket library": (https://www.npmjs.com/package/ws). This is a very simple and fast websocket server that doesn't have built-in support for streams. Upon receipt of each wav blob from a client, the server sends it to all the connected clients, except for the client from whom the blob came, through the following commands:
 
 	if (Buffer.isBuffer(message))
 	{
@@ -164,11 +164,11 @@ The Node server uses "ws: a Node.js WebSocket library": (https://www.npmjs.com/p
 
 Until a Stop-Recording button is pressed in a client, the server compiles incoming wav blobs into a wav file on the server's disk through the following three code snippets:
 
-1. This snippet imports the required node library for compiling a wav file:
+1. This command imports the required Node package for compiling a wav file:
 
 	const wav = require('wav');
 
-2. This snippet initializes a new wav file. If the audioNum is 1, the file will be called "1.wav" and will appear in the same directory as your server file. 
+2. This code snippet initializes a new wav file. If the audioNum is 1, the file will be called "1.wav" and will appear in the public route directory of your server. 
 
 	fileWriter = new wav.FileWriter(audioNum + '.wav' , 
   	{
@@ -177,7 +177,7 @@ Until a Stop-Recording button is pressed in a client, the server compiles incomi
     	bitDepth: 16
   	});
 
-This command strips off the 44 byte wav header from the blob and writes the buffer of the remainder to the wav file:
+This command writes a wav blob (after stripping off its 44 byte wav header) into the wav file that is being compiled:
 
 	fileWriter.write(Buffer.from(msg.subarray(44)));
 
