@@ -181,8 +181,8 @@ The parts of the client that record the input from the microphone owe much to tw
 
 The parts of the client that send data to speakers owe much to Sam Manchin's "Streaming Calls to a Browser with Voice Websockets": https://www.nexmo.com/blog/2016/12/19/streaming-calls-to-a-browser-with-voice-websockets-dr
 
-The ws server borrows heavily from the documentation that accompanied "ws: a Node.js WebSocket library": https://www.npmjs.com/package/ws
+The ws server borrows heavily from the documentation that accompanied Luigi Pinca's "ws: a Node.js WebSocket library": https://www.npmjs.com/package/ws
 
-Don't confuse me with a JavaScript expert. I have been programming in Fortran, Basic, IPL-V, LISP, C, Perl, and Java for about 50 years but am new to Javascript. The odd way I line up parentheses is due to the way I learned to do it in LISP. Any suggestions that you have for improving the code will be appreciated. Email them to me (drhbr1950@gmail.com). 
+I have been programming in Fortran, Basic, IPL-V, LISP, C, Perl, and Java for about 50 years but am new to Javascript. The odd way I line up parentheses is due to the way I learned to do it in LISP. Any suggestions that you have for improving the code will be appreciated. Email them to me (drhbr1950@gmail.com). 
 
 Howard Richman
