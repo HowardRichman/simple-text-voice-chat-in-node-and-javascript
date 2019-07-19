@@ -15,7 +15,7 @@ In order to get these files running on your website, just put them into the publ
 
   2. In the server file, change the paths of the secure certificate (cert:) and key (key:) to those on your server. You should be able find those paths in your server's httpd.conf file. 
 
-  3. If not already installed, install node.js and each of the required packages (fs, https, ws, moment, wav and path) on your server so that they can be accessed from your public root directory. 
+  3. If not already installed, install node.js and each of the required node packages (fs, https, ws, moment, wav and path) on your server so that they can be accessed from your public root directory. 
 
   4. Start the server. Use putty or telnet to go to the directory where the server.js file can be found and then type:
 
