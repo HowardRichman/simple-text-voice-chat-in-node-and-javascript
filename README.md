@@ -1,9 +1,9 @@
 # simple-text-voice-chat-in-node-and-javascript
-This voice/text chat uses a node websocket server, an html and javscript client and a javascript web worker. It consists of four files:
+This voice/text chat uses a Node websocket (ws) server, an html and javscript client and a javascript web worker. It consists of four files:
 
   1. client.htm. The client file which is written in html5 and javascript.
 
-  2. server.js. A Node ws (https://www.npmjs.com/package/ws) websocket server file.
+  2. server.js. A Node websocket (https://www.npmjs.com/package/ws) server file.
 
   3. worker.js. A short javascript web worker file with a single function. 
 
@@ -17,7 +17,7 @@ In order to get these files running on your website, just put them into the publ
 
   2. In the server file, change the paths of the secure certificate (cert:) and key (key:) to those on your server. You should be able find those paths in your server's httpd.conf file. 
 
-  3. If not already installed, install node.js and each of the required Node packages (fs, https, ws, moment, wav and path) on your server so that they can be accessed from your public root directory. 
+  3. If not already installed, install Node.js and each of the required Node packages (fs, https, ws, moment, wav and path) on your server so that they can be accessed from your public root directory. 
   
 TRYING OUT THE CHAT
 
@@ -31,11 +31,11 @@ TRYING OUT THE CHAT
   
   3. Type your name in the name box and type text in the textbox in one of the browsers then press the "Enter" key on your keyboard. Your text should appear in both browsers. 
   
-  4. Put on a headphone. Click the play button in the audio control at the top of the chat in both browsers. Click the recordbutton in the first browser and start speaking into your microphone. You should hear your own live voice come through the second browser with a 0.2 second delay. 
+  4. Put on a headphone. Click the play button in the audio control at the top of the chat in both browsers. Click the Record Button in the first browser and start speaking into your microphone. You should hear your own live voice come through the second browser with a 0.2 second delay. Meanwhile, the Record Button in the first browser should change into a Stop-Recording Button. 
   
-  5. Reply by clicking the play button in the second browser. You should hear your own live voice come through in the first browser, and the Stop-Recording Button in the first browser will change to a Record Button. 
+  5. Reply by clicking the Record Button in the second browser. You should hear your own live voice come through in the first browser, and the Stop-Recording Button in the first browser will change to a Record Button. 
   
-  6. Click the Stop Recording Button in the second browser. An audio control with a link to the wav file of the conversation will pop up in both browsers. You can click on the play button within that audio control to hear the conversation. 
+  6. Click the Stop-Recording Button in the second browser. An audio control with a link to the wav file of the conversation will pop up in both browsers. You can click on the play button within that audio control to listen to the conversation again. 
 
 CLIENT
 
@@ -49,9 +49,9 @@ The following are *not* bugs:
 
 The following buttons are available at the bottom of the chat window:
 
-  1. Record Button. Clicking the solid circle turns your microphone on and changes this button into Stop Recording Button. This is a "walky-talky" chat: You click to turn your microphone on just before you speak and turn your microphone off when you are done.
+  1. Record Button. Clicking the solid circle turns your microphone on and changes this button into a Stop-Recording Button. This is a "walky-talky" chat: You click to turn your microphone on just before you speak and click to turn your microphone off when you are done.
 
-  2. Stop Recording Button. Clicking the solid square turns your microphone off and changes this button into a Record Button. Also, if someone else turns on their microphone when your microphone is on, your microphone goes off and this button changes into Record Button. 
+  2. Stop-Recording Button. Clicking the solid square turns your microphone off and changes this button into a Record Button. Also, if someone else turns on their microphone when your microphone is on, your microphone goes off and this button changes into a Record Button. 
 
   3. Disconnect. Clicking this button (or closing the chat window) causes you to leave the chat. Pressing F5 (or reopening the window) gets you back into the chat.
 
