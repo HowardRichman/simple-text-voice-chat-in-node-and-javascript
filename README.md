@@ -15,7 +15,7 @@ In order to get these files running on your website, just put them into the publ
 
   2. In the server file, change the paths of the secure certificate (cert:) and key (key:) to those on your server. You should be able find those paths in your server's httpd.conf file. 
 
-  3. If not already installed, install node.js and each of the required libraries (fs, https, ws, moment, and wav) on your server so that they can be accessed from your public root directory. 
+  3. If not already installed, install node.js and each of the required libraries (fs, https, ws, moment, wav and path) on your server so that they can be accessed from your public root directory. 
 
   4. Start the server. Use putty or telnet to go to the directory where the server.js file can be found and then type:
 
@@ -31,7 +31,7 @@ The following are *not* bugs:
 
   1. The very first time you try to speak in a chat on this page, you will be asked to give this page permission to use your computer's microphone. (Modern browers don't let webpages record you without your permission.) During the first time, a cookie will be recorded so that you won't have to give permission the next time.
 
-  2. Each time you enter a chat, you won't be able to hear any live conversation until you have clicked the play button on a recording on the chat page. You can click to play any of the recordings. That's why there is a short silent sound file in html5 audio controls at the very top of the page.  (Modern browsers don't let webpages make noise until you click a play button.)
+  2. Each time you enter a chat, you won't be able to hear any live conversation until you have clicked the play button on a recording on the chat page. That's why there is a short silent sound file in html5 audio controls at the very top of the page.  (Modern browsers don't let webpages make noise until you click a play button.)
 
   3. If you only have the chat room open in one browser on your computer, you won't hear your own voice while you are speaking, because that could cause feedback. But if everything is working right, you should hear other voices live when they are speaking.
 
