@@ -9,6 +9,8 @@ This voice/text chat uses a node websocket server, an html and javscript client 
 
   4. silence.mp3. A short sound file that plays about a second of silence.
 
+INSTALLING AND RUNNING THE CHAT
+
 In order to get these files running on your website, just put them into the public root directory after changing the following in their codes:
 
   1. In the client file, change "example.com" to your website.
@@ -23,7 +25,15 @@ In order to get these files running on your website, just put them into the publ
 
   		Press enter and look for error messages which would tell you if a required node package is not installed.
 
-  5. Open up two different browsers on your computer, one in Chrome and the other in Firefox. Go to https://example.com/client.htm (change "example.com" to your website) in both. Type your name in the name box and type text in the textbox in one of the browsers then press "enter". Your text should appear in both browsers. Put on a headphone. Click the play button in the audio control at the top of the chat in both browsers. Click the recordbutton on one browser and start speaking into your microphone. You should hear your own live voice come through the other browser with a .2 second delay.
+  5. Open up two different browsers on your computer, one in Chrome and the other in Firefox. Go to https://example.com/client.htm (change "example.com" to your website) in both. (Other people can enter the chat at the same time on their computers by going to the same URL.) 
+  
+  6. Type your name in the name box and type text in the textbox in one of the browsers then press the "Enter" key on your keyboard. Your text should appear in both browsers. 
+  
+  7. Put on a headphone. Click the play button in the audio control at the top of the chat in both browsers. Click the recordbutton in the first browser and start speaking into your microphone. You should hear your own live voice come through the second browser with a 0.2 second delay. 
+  
+  8. Reply by clicking the play button in the second browser. You should hear your own live voice come through in the first browser, and the Stop-Recording Button in the first browser will change to a Record Button. 
+  
+  9. Click the Stop Recording Button in the second browser. An audio control with a link to the wav file of the conversation will pop up in both browsers. You can click on the play button within that audio control to hear the conversation. 
 
 CLIENT
 
