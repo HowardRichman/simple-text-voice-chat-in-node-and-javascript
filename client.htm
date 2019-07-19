@@ -68,7 +68,7 @@ function connectWsChat()
 	try 
 	{
 		window.WebSocket = window.WebSocket || window.MozWebSocket;
-		var host = 'wss://aphomeschoolers.com:8089/';
+		var host = 'wss://example.com:8089/';
 		webSocket = new WebSocket( host );
 		webSocket.binaryType = 'arraybuffer';
 		webSocket.onopen = function() 

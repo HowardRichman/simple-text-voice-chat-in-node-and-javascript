@@ -7,8 +7,8 @@ const path = require('path');
 
 // Look in your server's httpd.conf file to find the correct settings for the server certificate and key 
 const server = new https.createServer({
-  cert: fs.readFileSync('/var/cpanel/ssl/apache_tls/aphomeschoolers.com/combined'),
-  key: fs.readFileSync('/var/cpanel/ssl/apache_tls/aphomeschoolers.com/combined')
+  cert: fs.readFileSync('/var/cpanel/ssl/apache_tls/example.com/combined'),
+  key: fs.readFileSync('/var/cpanel/ssl/apache_tls/example.com/combined')
 });
 const wss = new WebSocket.Server({ server });
 const port = '8089';
