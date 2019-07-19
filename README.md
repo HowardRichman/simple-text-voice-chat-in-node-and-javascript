@@ -11,17 +11,17 @@ This voice/text chat uses a node websocket server, an html and javscript client 
 
 In order to get these files running on your website, just put them into the public root directory after changing the following in their codes:
 
-  1. In the client file, change "example.com" to your website's URL.
+  1. In the client file, change "example.com" to your website.
 
   2. In the server file, change the paths of the secure certificate (cert:) and key (key:) to those on your server. You should be able find those paths in your server's httpd.conf file. 
 
-  3. If not already installed, install node.js and each of the required libraries (fs, https, ws, moment, wav and path) on your server so that they can be accessed from your public root directory. 
+  3. If not already installed, install node.js and each of the required packages (fs, https, ws, moment, wav and path) on your server so that they can be accessed from your public root directory. 
 
   4. Start the server. Use putty or telnet to go to the directory where the server.js file can be found and then type:
 
 		node server.js
 
-  		Press enter and look for error messages which would tell you if a required node libraries is not installed.
+  		Press enter and look for error messages which would tell you if a required node package is not installed.
 
   5. Open up two different browsers on your computer, one in Chrome and the other in Firefox. Go to https://example.com/client.htm (change "example.com" to your URL) in both. Type your name in the name box and type text in the textbox in one of the browsers then press "enter". Your text should appear in both browsers. Put on a headphone. Click the play button in the audio control at the top of the chat in both browsers. Click the recordbutton on one browser and start speaking into your microphone. You should hear your own live voice come through the other browser with a .2 second delay.
 
