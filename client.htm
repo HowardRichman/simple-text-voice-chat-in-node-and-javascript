@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<TITLE>Chat Client</TITLE>
+	<style>
+		#chatLog 
+		{
+			max-height: 430px;
+			overflow-y: auto;
+			width: 100%
+		}
+	</style>
+	<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="8db2a8df-270b-47e9-bd71-bb52304a8a9b" type="text/javascript" async></script>
+    <script id="CookieDeclaration" src="https://consent.cookiebot.com/8db2a8df-270b-47e9-bd71-bb52304a8a9b/cd.js" type="text/javascript" async></script>
+</head>
+<body>
+<div id="chatContainer">
+<div id="chatLog">
+<audio controls='controls'><source src='silence.mp3'  type= 'audio/mp3'></audio> 
+<p>If the button below says "disconnect" then the server is running, but if it says "Chat not yet set up", then the connection is not working.</p>
+<p>To prepare for the chat:</p><ul>
+<li>Click the play button in the audio control above to turn on audio so that you can hear people speaking live.</li>
+<li>Type in your name where it says "Name" below.</li>
+</ul>
+<p>To speak:<ul>
+<li>Click &#9679 to turn your mike on just before you start speaking.</li>
+<li>Click &#11035; to turn your mike off soon after you finish speaking.</li>
+</ul>
+<p>To post text:<ul>
+<li>Make sure your name appears where it says "Name:" below.</li>
+<li>Type text where it says "Text:" below.</li>
+<li>Press the "Enter" key on your keyboard.</li>
+</ul>
+</div>
+<div id="chatInput">
+	<p>Name: <input id='chatUser' type="text" size=40 />
+	<br>Text: <input id="chatText" type="text" size=42 />
+	<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<button id="recordButton">●</button>
+	<button id="chatButton">Chat not yet set up</button>
+</p>
+</div>
+</div>
+</div>
+
+<script src="../../jquery.js"></script>
+	
+<script>
+var nowListening = 0;
+var ctx;
+var count = 0;
+var startTime;
+var currentTime = 0;
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+var webSocket;
+var nowRecording = 0;
+var audioContext; 
+var worker = new Worker("worker.js");
+var recordButton = document.getElementById("recordButton");
+//add event to recordButton
+recordButton.addEventListener("click", startRecording);
+
+
+// These are the websocket connection functions
+function connectWsChat()
+{
+	try 
+	{
+		window.WebSocket = window.WebSocket || window.MozWebSocket;
+		var host = 'wss://aphomeschoolers.com:8089/';
+		webSocket = new WebSocket( host );
+		webSocket.binaryType = 'arraybuffer';
+		webSocket.onopen = function() 
+		{
+			var chatUser = $( '#chatUser' ).val();
+			$( '#chatButton' ).text( 'Disconnect' );
+		}
+	    webSocket.onmessage = function( msg ) 
+		{
+			if (msg.data instanceof ArrayBuffer)
+			{
+				// Here the message received from the websocket is a wav blob
+				processSpeakerData(msg.data);
+			}
+			else
+			{
+				// Here the message received from the websocket is text
+				var chatUser = $( '#chatUser' ).val();
+				var lastCharacters = msg.data.substr(msg.data.length - 18);
+				if (lastCharacters == ' is talking...</p>' && msg.data !== '<p>' + chatUser + ' is talking...</p>')
+				{
+					startSpeakerControls();
+				}
+				if (nowListening == 1 && lastCharacters == "/wav'></audio></p>")
+				{
+					endSpeakerControls();
+				}
+				if (nowListening == 1 && msg.data == "<p>" + chatUser + " is responding...</p>")
+				{
+					console.log("Turning nowListening Off because I am the one responding");
+					endSpeakerControls();
+				}
+				if (nowRecording == 1 && lastCharacters == " responding...</p>" && msg.data !== '<p>' + chatUser + ' is responding...</p>')
+				{
+					console.log("Somebody else is responding so turning nowRecording off");
+					nowRecording = 0;
+					audioContext.close();
+					// Change the square into circle on recordbutton
+					$( '#recordButton' ).text( '●' );
+					startSpeakerControls();
+				}
+				logWsChatMessage( '<p class="message">' + msg.data + '</p>' );
+			}
+		}
+		webSocket.onclose = function() 
+		{
+			var chatUser = $( '#chatUser' ).val();
+			logWsChatMessage('<p>' + chatUser + ' has left the chat room</p>' );
+		}
+	} 
+	catch( exception ) 
+	{
+		logWsChatMessage( '<p>Error ' + exception + '.</p>' );
+	}
+}
+
+function isConnectedWsChat() 
+{
+	if( webSocket && webSocket.readyState==1 ) 
+	{
+		$( '#chatButton' ).text( 'Disconnect' );
+		return 1;
+	}
+}
+
+function sendWsChat() 
+{
+	// This routine sends text to the server
+	var chatLog = $( '#chatLog' );
+	if( isConnectedWsChat() ) 
+	{
+		var chatUser = $( '#chatUser' ).val();
+		var chatText = $( '#chatText' ).val();
+		if( chatUser=='' || chatText=='' )
+		{
+			return;
+		}
+		try
+		{
+			chatLog.scrollTop( chatLog.prop( 'scrollHeight' ) );
+			webSocket.send( chatUser + '|' + chatText );
+		} 
+		catch( exception )
+		{
+			logWsChatMessage( '<p class="warning"> Error: ' + exception + '</p>' );
+		}
+		$( '#chatText' ).val( '' );
+	}
+}
+
+function logWsChatMessage(msg) 
+{
+	var chatLog = $( '#chatLog' );
+	chatLog.append( '<p>' + msg + '</p>' );
+	chatLog.scrollTop( chatLog.prop( 'scrollHeight' ) );
+}
+
+$(document).ready( function() 
+{
+	if( !( 'WebSocket' in window ) ) 
+	{
+		$( '#chatInput').fadeOut( 'fast' );
+		$( '<p>Oh no, you need a browser that supports WebSockets.</p>' )
+        .appendTo( '#chatContainer' );
+	} 
+	else 
+	{
+		connectWsChat();
+	}
+
+	$( '#chatText' ).keypress( function( event ) 
+	{
+		if ( event.keyCode == '13' ) 
+		{
+			// If enter is pressed on the keyboard, send the text message to the server
+			sendWsChat();
+		}
+	});
+
+	worker.onmessage = function(event) 
+	{
+		// This sends the wav blob received from the webworker to the server
+		webSocket.send( event.data );
+	}
+	
+	$( '#chatButton' ).click( function() 
+	{
+		if( webSocket && webSocket.readyState==1 ) 
+		{
+			var chatUser = $( '#chatUser' ).val();
+			webSocket.send( '<p>' + $( '#chatUser' ).val() + ' has left the chat room.</p>' );
+			webSocket.close();
+			$( this ).text( 'Connect' );
+		} 
+		else 
+		{
+			connectWsChat();
+			$( this ).text( 'Disconnect' );
+		}
+	});
+
+	$( window ).on ("unload", function(e) 
+	{
+		if( webSocket && webSocket.readyState==1 ) 
+		{
+			var chatUser = $( '#chatUser' ).val();
+			webSocket.send( '<p>' + chatUser + ' has left the chat room.</p>' );
+			webSocket.close();
+		}
+	});
+});
+
+
+function startSpeakerControls () 
+{
+    nowListening = 1;
+	count = 0;
+	ctx = new AudioContext();
+}
+
+function endSpeakerControls () 
+{
+    nowListening = 0;
+	count = 0;
+	ctx.close();
+}
+
+function processSpeakerData(data) 
+{
+	if (count == 0)
+	{
+		startTime = ctx.currentTime;
+	}
+	ctx.decodeAudioData(data, function(buffer) 
+	{
+		// Data is a wav blob
+		count++;
+		var playTime = startTime + .2 + (count * 0.0928798);		
+		playBlob(buffer, playTime);
+	},
+	function(e) 
+	{
+		console.log("Error with decoding audio data" + e.err); 
+	});
+}
+
+function playBlob(buffer, playTime) 
+{
+	var source = ctx.createBufferSource(); //Create a new BufferSource
+	source.buffer = buffer; // Put the sample content into the buffer
+	source.connect(ctx.destination); // Also Connect the source to the audio output
+	source.start(playTime); // Set the starting time of the sample to the scheduled play time
+}
+
+function recorderProcess(e) 
+{
+	if (nowRecording == 0) return;
+	var left = e.inputBuffer.getChannelData(0);
+	// Use the webworker to create the wav blob, given the left buffer from the microphone
+	worker.postMessage ( left );
+}
+
+function startRecording() {
+	if ($( '#recordButton' ).text() === "●")
+	{
+		// Here the text of the button is a circle. This turns it into a big black square.
+		var constraints = {
+			audio: true,
+			video: false
+		};
+		navigator.mediaDevices.getUserMedia(constraints).then(function(stream) 
+		{
+			var chatUser = $( '#chatUser' ).val();
+			console.log("getUserMedia() success, stream created, initializing Recorder.js ...");
+			nowRecording = 1;
+			// console.log("Set record button as big square");
+			$( '#recordButton' ).text( '⬛' );
+			try
+			{
+				webSocket.send( chatUser + '|<++>' );
+			} 
+			catch( exception )
+			{
+				logWsChatMessage( '<p class="warning"> Error: ' + exception + '</p>' );
+			}
+			audioContext = new AudioContext();
+			// console.log("Created audioContext");
+			// gumStream = stream;
+			var audioInput = audioContext.createMediaStreamSource(stream);
+			// console.log("Created audioInput");
+			var bufferSize = 4096;
+			var config = { bufferLen: bufferSize, numChannels: 1, mimeType: 'audio/wav' };
+			var recorder = (audioContext.createScriptProcessor || audioContext.createJavaScriptNode).call(audioContext, config.bufferLen, config.numChannels, config.numChannels);
+			audioInput.connect(recorder);
+			// console.log("Recorder connected with audioInput");
+			recorder.connect(audioContext.destination); //this should not be necessary
+			// console.log("Created audio node called recorder");
+			recorder.onaudioprocess = recorderProcess;
+			// console.log("Assigned recorderProcess to recorder");
+		}).catch(function(err) {
+			console.log("error %s", err);
+			$( '#recordButton' ).text( '●' );
+		});
+	}
+	else 
+	{
+		// Here the text of the button is a square, indicating stop recording, not a right facing triangle
+		// Clicking on this text stops the recorder and uploads a stop signal to the websocket.
+		nowRecording = 0;
+		// gumStream.getAudioTracks()[0].stop();
+		audioContext.close();
+		var chatUser = $( '#chatUser' ).val();
+		var chatText = "<-->";
+		// Change the record button back to a circle
+		$( '#recordButton' ).text( '●' );
+		try
+		{
+			webSocket.send( chatUser + '|' + chatText );
+		} 
+		catch( exception )
+		{
+			logWsChatMessage( '<p class="warning"> Error: ' + exception + '</p>' );
+		}
+    }
+}
+
+// ACKNOWLEDGMENTS
+
+// The basic structure of the websocket client comes from Peter Thoeny's post, "How to Create a Chat Application with a WebSocket": 
+// https://twiki.org/cgi-bin/view/Blog/BlogEntry201604x1
+
+// The parts of the client that record the input from the microphone owe much to two closely related contributions: 
+// 1. Matt Diamond's recorder.js: 
+//    https://github.com/mattdiamond/Recorderjs
+// 2. Gabriel Poca's tutorial, "HTML Capture streaming to Node.js (no browser extensions)": 
+//    https://gabrielpoca.com/2014-06-24-streaming-microphone-from-browser-to-nodejs-no-plugin/
+
+// The parts of the client that send data to speakers owe much to Sam Manchin's "Streaming Calls to a Browser with Voice Websockets": 
+// https://www.nexmo.com/blog/2016/12/19/streaming-calls-to-a-browser-with-voice-websockets-dr
+
+// The websocket server is based upon documentation and code from "ws: a Node.js WebSocket library": 
+// https://www.npmjs.com/package/ws
+
+// Please email suggestions for improvements to the author: Howard Richman (drhbr1950@gmail.com)
+
+// Don't confuse me with a JavaScript expert. I have been programming in Fortran, Basic, IPL-V, LISP, C, Perl, and Java 
+// for about 50 years but am new to Javascript. The odd way I line up parentheses is due to the way I learned to do it in LISP. 
+// Any suggestions that you have for improving the code will be appreciated. Email them to me (drhbr1950@gmail.com). 
+
+// Howard Richman
+	
+</script>	
+
+<!-- The next script from recorder.js saves a cookie enabling microphone on this page-->	
+	<script type="text/plain" data-cookieconsent="statistics">
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-133914-18', 'auto');
+	ga('set', 'anonymizeIp', true);
+	ga('send', 'pageview');
+	</script>
+
+  </body>
+</html>
