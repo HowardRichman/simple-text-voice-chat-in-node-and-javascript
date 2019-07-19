@@ -1,11 +1,8 @@
 This voice/text chat uses a node websocket server, an html and javscript client and a javascript web worker. It consists of four files:
 
   1. client.htm. The client file which is written in html5 and javascript.
-
   2. server.js. A Node ws (https://www.npmjs.com/package/ws) websocket server file.
-
   3. worker.js. A short javascript web worker file with a single function. 
-
   4. silence.mp3. A short sound file that plays about a second of silence.
 
 In order to get these files running on your website, just put them into the public root directory after changing the following in their codes:
@@ -30,7 +27,7 @@ The following are *not* bugs:
 
   1. The very first time you try to speak in a chat on this page, you will be asked to give this page permission to use your computer's microphone. (Modern browers don't let webpages record you without your permission.) During the first time, a cookie will be recorded so that you won't have to give permission the next time.
 
-  2. Each time you enter a chat, you won't be able to hear any live conversation until you have clicked the play button on a recording on the chat page. You can click to play any of the recordings. That's why there is a short silent sound file in html5 audio controls at the very top of the page.  (Modern browsers don't let webpages make noise until you click a play button.)
+  2. Each time you enter a chat, you won't be able to hear any live conversation until you have clicked the play button on a recording on the chat page. That's why there is a short silent sound file in html5 audio controls at the very top of the page.  (Modern browsers don't let webpages make noise until you click a play button.)
 
   3. If you only have the chat room open in one browser on your computer, you won't hear your own voice while you are speaking, because that could cause feedback. But if everything is working right, you should hear other voices live when they are speaking.
 
