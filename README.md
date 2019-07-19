@@ -23,7 +23,7 @@ In order to get these files running on your website, just put them into the publ
 
   		Press enter and look for error messages which would tell you if a required node package is not installed.
 
-  5. Open up two different browsers on your computer, one in Chrome and the other in Firefox. Go to https://example.com/client.htm (change "example.com" to your URL) in both. Type your name in the name box and type text in the textbox in one of the browsers then press "enter". Your text should appear in both browsers. Put on a headphone. Click the play button in the audio control at the top of the chat in both browsers. Click the recordbutton on one browser and start speaking into your microphone. You should hear your own live voice come through the other browser with a .2 second delay.
+  5. Open up two different browsers on your computer, one in Chrome and the other in Firefox. Go to https://example.com/client.htm (change "example.com" to your website) in both. Type your name in the name box and type text in the textbox in one of the browsers then press "enter". Your text should appear in both browsers. Put on a headphone. Click the play button in the audio control at the top of the chat in both browsers. Click the recordbutton on one browser and start speaking into your microphone. You should hear your own live voice come through the other browser with a .2 second delay.
 
 CLIENT
 
