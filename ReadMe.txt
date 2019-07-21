@@ -6,7 +6,7 @@ This voice/text chat uses a Node websocket server, an html and javscript client 
 
   3. worker.js. A short javascript web worker file with a single function.
  
-  4. silence.mp3. A short sound file that plays about a second of silence.
+  4. silence.mp3. A sound file (from https://github.com/anars/blank-audio) that plays 1.5 seconds of silence.
   
 INSTALLING THE CHAT
 
