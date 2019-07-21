@@ -128,7 +128,7 @@ The web worker contains a single function which receives a floating point buffer
 
 	self.onmessage= function (e) 
 	{
-		// The 44 byte wav header should look like this:
+		// The 44 byte wav header of a 4096 byte mono wav file should look like this:
 		// 52 49 46 46 24 20 00 00 57 41 56 45 66 6d 74 20 10 00 00 00 01 00 01 00 44 ac 00 00 88 58 01 00 02 00 10 00 64 61 74 61 00 20 00 00
 		var l = 4096;
 		var i16 = new Int16Array(4118);
