@@ -8,6 +8,8 @@ This voice/text chat uses a Node websocket server, an html and javscript client 
  
   4. silence.mp3. A sound file (from https://github.com/anars/blank-audio) that plays 1.5 seconds of silence.
   
+The voice chat features do not work in all browsers. I have only fully tested it with Chrome and Firefox. Some older browsers don't even support wav format. There is another problem with wav files: They take up lots of room on disk. If you are going to use this live chat in production, I recommend that you install Lame on your website (http://lame.sourceforge.net/). There are commented-out lines in both the server and the client files which show you the changes that you would have to make to utilize convert the wav files to mp3 files using Lame and then delete the wav files. 
+
 INSTALLING THE CHAT
 
 In order to get these files running on your website, just put them into the public root directory after doing the following:
@@ -54,7 +56,7 @@ The following buttons are available at the bottom of the chat window:
 
   3. Disconnect. Clicking this button (or closing the chat window) causes you to leave the chat. Pressing F5 (or reopening the window) gets you back into the chat.
 
-The voice chat features do not work in all browsers. But all of the features work in both Chrome and Firefox at their default settings. If clients' browsers don't allow them to speak or listen to the live voice, it should still allow them to participate by posting text and by listening to immediately posted recordings of the live voices. If they can't hear the posted recordings, then their browsers don't support wav format. There is some commented out code in the server and the client which could solve this problem, but you would first have to install Lame (http://lame.sourceforge.net/) on the server's website to get the commented out lines to work. Here is how the voice chat features of the client work:
+Here is how the voice chat features of the client work:
 
 The voice data comes off the microphone as a Float32 buffer which gets sent to the worker file through the following commands:
 

@@ -101,17 +101,33 @@ wss.on('connection', function connection(ws)
 							// 	var wavPath = path.relative(__dirname, audioNum + '.wav');
 							// 	var mp3Path = path.relative(__dirname, audioNum + '.mp3');
 							audioNum++;
-							// Next 10 lines should be commented off if you are using Lame to convert wav to mp3.
-							// var encoder = new Lame({
-							//     output: mp3Path,
-							//     bitrate: 192
-							//     }).setFile( wavPath );
-							// encoder
-							//     .encode()
-							//	   .then(() => {
-							//	})
-							//  .catch(error => {
-							//	});
+							// Next lines should *not* be commented if you are using Lame to convert wav to mp3.
+							// encoder = new Lame(
+							// {
+							//  	output: mp3Path,
+							//  	bitrate: 192
+							// }).setFile( wavPath );
+							// encoder.encode().then(() => 
+							// {
+							//  	fs.unlink(wavPath, function(err) 
+							//  	{
+							//  		if(err) 
+							//  		{
+							//  			return console.log(err);
+							//  		}
+							//  	});
+							//  }).catch(error => 
+							//  {
+							//  	return console.log(error);
+							//  });
+							audioNum++;
+							fs.writeFile(audioNumPath, audioNum, 'utf-8', function(err) 
+							{
+								if(err) 
+								{
+									return console.log(err);
+								}
+							});
 						}
 						else
 						{
