@@ -9,7 +9,7 @@ This voice/text chat uses a Node websocket (ws) server, an html and javscript cl
 
   4. silence.mp3. A sound file (from https://github.com/anars/blank-audio) that plays 1.5 seconds of silence.
 
-The voice chat features do not work in all browsers. I have only fully tested them with Chrome and Firefox. Some older browsers don't even support wav format. There is another problem with wav files: They take up lots of room on disk. If you are going to use this live chat in production, I recommend that you install Lame on your website (http://lame.sourceforge.net/). There are commented-out lines in both the server and the client files which show you the changes that you would have to make to convert the wav files to mp3 files using Lame and then delete the wav files. 
+The voice chat features do not work in all browsers. I have only fully tested them with Chrome and Firefox. Some older browsers don't even support wav format. There is another problem with wav files: They take up lots of room on disk. If you are going to use this live chat in production, I recommend that you install Lame on your website (http://lame.sourceforge.net/). There are commented-out lines in both the server and the client files which show you the changes that you would have to make to convert the wav files to mp3 files (using Lame) and then delete the wav files. 
 
 INSTALLING THE CHAT
 
