@@ -4,6 +4,9 @@ const WebSocket = require('ws');
 const moment = require('moment');
 const wav = require('wav');
 const path = require('path');
+// Next line should be commented off if you are using Lame to convert wav files to mp3.
+// const Lame = require("node-lame").Lame;
+
 
 // Look in your server's httpd.conf file to find the correct settings for the server certificate and key 
 const server = new https.createServer({
@@ -91,9 +94,24 @@ wss.on('connection', function connection(ws)
 						{
 							// Someone has turned microphone off.
 							fileWriter.end();
+							// If you are using Lame to convert file to mp3, then repl "wav" in next line with "mp3".
 							msg = "<p><audio controls preload='none'><source src='" + audioNum + ".wav'  type= 'audio/wav'></audio></p>\n";
-							audioNum++;
 							fileWriterOn = 0;
+							//  Next two lines should be commented off if you are using Lame to convert wav to mp3.
+							// 	var wavPath = path.relative(__dirname, audioNum + '.wav');
+							// 	var mp3Path = path.relative(__dirname, audioNum + '.mp3');
+							audioNum++;
+							// Next 10 lines should be commented off if you are using Lame to convert wav to mp3.
+							// var encoder = new Lame({
+							//     output: mp3Path,
+							//     bitrate: 192
+							//     }).setFile( wavPath );
+							// encoder
+							//     .encode()
+							//	   .then(() => {
+							//	})
+							//  .catch(error => {
+							//	});
 						}
 						else
 						{
