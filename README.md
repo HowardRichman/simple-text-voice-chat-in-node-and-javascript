@@ -55,7 +55,7 @@ The following buttons are available at the bottom of the chat window:
 
   3. Disconnect. Clicking this button (or closing the chat window) causes you to leave the chat. Pressing F5 (or reopening the window) gets you back into the chat.
 
-The voice chat features do not work in all browsers. For example, you can't hear people speaking live in Safari at its default settings, but all of the features work in both Chrome and Firefox at their default settings. If your browser doesn't allow you to speak or listen to the live voice, it will still allow you to participate by posting text and by listening to immediately posted recordings of the live voices. Here is how the voice chat features of the client work:
+The voice chat features do not work in all browsers. But all of the features work in both Chrome and Firefox at their default settings. If clients' browsers don't allow them to speak or listen to the live voice, it should still allow them to participate by posting text and by listening to immediately posted recordings of the live voices. If they can't hear the posted recordings, then their browswers don't support wav format. There is commented out code in the server and the client which could solve this problem, but you would first have to install Lame (http://lame.sourceforge.net/) on the server's website to get the commented out lines to work. Here is how the voice chat features of the client work:
 
 After you press the Record Button, your voice data comes off the left channel of your microphone in 4096 byte floating-point buffers. Each buffer gets sent to the worker file through the following commands:
 
@@ -128,22 +128,38 @@ The web worker contains a single function which receives a floating point buffer
 
 	self.onmessage= function (e) 
 	{
-		var l = 4096; 
-  		var wavHeader ="524946462420000057415645666d7420100000000100010044ac000088580100020010006461746100200000";
-  		var i16 = new Int16Array(l);
-  		while (l--) 
-  		{
-			i16[l] = Math.min(1, e.data[l])*0x7FFF; 
-    	}
-    	var uint8array = new Uint8Array(8236);
-    	for (var i = 0; i < 44; i++)
-    	{
-      		uint8array[i] = parseInt(wavHeader.substr(i*2,2), 16);
-    	}
-    	var srcU8 = new Uint8Array(i16.buffer, 0, 8192);
-    	uint8array.set(srcU8, 44);
-    	var ab = uint8array.buffer;
-    	postMessage (ab);
+		// The 44 byte wav header should look like this:
+		// 52 49 46 46 24 20 00 00 57 41 56 45 66 6d 74 20 10 00 00 00 01 00 01 00 44 ac 00 00 88 58 01 00 02 00 10 00 64 61 74 61 00 20 00 00
+		var l = 4096;
+		var i16 = new Int16Array(4118);
+		while (l--) 
+		{
+			i16[l+22] = Math.min(1, e.data[l])*0x7FFF;
+		}
+		i16[21] = 0x0000;
+		i16[20] = 0x2000;
+		i16[19] = 0x6174;
+		i16[18] = 0x6164;
+		i16[17] = 0x0010;
+		i16[16] = 0x0002;
+		i16[15] = 0x0001;
+		i16[14] = 0x5888;
+		i16[13] = 0x0000;
+		i16[12] = 0xac44;
+		i16[11] = 0x0001;
+		i16[10] = 0x0001;
+		i16[9] = 0x0000;
+		i16[8] = 0x0010;
+		i16[7] = 0x2074;
+		i16[6] = 0x6d66;
+		i16[5] = 0x4556;
+		i16[4] = 0x4157;
+		i16[3] = 0x0000;
+		i16[2] = 0x2024;
+		i16[1] = 0x4646;
+ 		i16[0] = 0x4952;
+		var ab = i16.buffer;
+		postMessage (ab);
 	}
 
 SERVER
