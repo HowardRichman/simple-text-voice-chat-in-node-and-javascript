@@ -97,29 +97,29 @@ wss.on('connection', function connection(ws)
 							// If you are using Lame to convert file to mp3, then repl "wav" in next line with "mp3".
 							msg = "<p><audio controls preload='none'><source src='" + audioNum + ".wav'  type= 'audio/wav'></audio></p>\n";
 							fileWriterOn = 0;
-							//  Next two lines should be commented off if you are using Lame to convert wav to mp3.
-							// 	var wavPath = path.relative(__dirname, audioNum + '.wav');
-							// 	var mp3Path = path.relative(__dirname, audioNum + '.mp3');
-							audioNum++;
-							// Next lines should *not* be commented if you are using Lame to convert wav to mp3.
-							// encoder = new Lame(
-							// {
-							//  	output: mp3Path,
-							//  	bitrate: 192
-							// }).setFile( wavPath );
-							// encoder.encode().then(() => 
-							// {
-							//  	fs.unlink(wavPath, function(err) 
-							//  	{
-							//  		if(err) 
-							//  		{
-							//  			return console.log(err);
-							//  		}
-							//  	});
-							//  }).catch(error => 
-							//  {
-							//  	return console.log(error);
-							//  });
+							//  Next lines should *not* be commented off if you are using Lame to convert wav to mp3:
+							/*
+							var wavPath = path.relative(__dirname, audioNum + '.wav');
+							var mp3Path = path.relative(__dirname, audioNum + '.mp3');
+							encoder = new Lame(
+							{
+							  	output: mp3Path,
+							  	bitrate: 192
+							}).setFile( wavPath );
+							encoder.encode().then(() => 
+							{
+							  	fs.unlink(wavPath, function(err) 
+							  	{
+							  		if(err) 
+							  		{
+							  			return console.log(err);
+							  		}
+							  	});
+							}).catch(error => 
+							{
+							  	return console.log(error);
+							});
+							*/
 							audioNum++;
 							fs.writeFile(audioNumPath, audioNum, 'utf-8', function(err) 
 							{
